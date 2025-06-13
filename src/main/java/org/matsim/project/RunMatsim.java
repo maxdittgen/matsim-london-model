@@ -18,9 +18,13 @@
  * *********************************************************************** */
 package org.matsim.project;
 
+import extensions.selectors.LLMPlanSelector;
+import extensions.selectors.LLMPlanStrategyProvider;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.controler.AbstractModule;
+import org.matsim.core.replanning.PlanStrategyImpl;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.scenario.ScenarioUtils;
@@ -61,8 +65,31 @@ public class RunMatsim{
 //		controler.addOverridingModule( new SimWrapperModule() );
 		
 		// ---
+		controler.addOverridingModule(new AbstractModule() {
+			@Override
+			public void install() {
+				addPlanStrategyBinding("LLMPlanStrategy").toInstance(
+						new PlanStrategyImpl(new LLMPlanSelector<>(getApiKey()))
+				);
+			}
+		});
 		
 		controler.run();
+	}
+
+	// Add this helper method to your main class
+	private static String getApiKey() {
+		String key = System.getenv("GROK_API_KEY");
+		if (key != null && !key.trim().isEmpty()) {
+			return key;
+		}
+
+		key = System.getProperty("grok.api.key");
+		if (key != null && !key.trim().isEmpty()) {
+			return key;
+		}
+
+		throw new RuntimeException("Grok API key not found. Please set GROK_API_KEY environment variable or grok.api.key system property.");
 	}
 	
 }

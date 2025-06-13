@@ -36,13 +36,18 @@
 	</module>
 	
 	<module name="replanning">
+<!--		<parameterset type="strategysettings" >-->
+<!--			<param name="strategyName" value="BestScore" />-->
+<!--			<param name="weight" value="0.9" />-->
+<!--		</parameterset>-->
+<!--		<parameterset type="strategysettings" >-->
+<!--			<param name="strategyName" value="ReRoute" />-->
+<!--			<param name="weight" value="0.1" />-->
+<!--		</parameterset>-->
+<!--		custom planning using Grok-->
 		<parameterset type="strategysettings" >
-			<param name="strategyName" value="BestScore" />
-			<param name="weight" value="0.9" />
-		</parameterset>
-		<parameterset type="strategysettings" >
-			<param name="strategyName" value="ReRoute" />
-			<param name="weight" value="0.1" />
+			<param name="strategyName" value="LLMPlanStrategy" />
+			<param name="weight" value="1.0" />
 		</parameterset>
 	</module>
 
